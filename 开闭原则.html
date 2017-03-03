@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="questions"></div>
+<script>
+//    处理问题
+    function Question(spec,my) {
+        var that={};
+        my=my||{};
+        my.lable=spec.lable;
+        that.render=function () {
+            var questionWrapper=document.createElement('div');
+            var questionLable=document.createElement('div');
+            var lable=document.createTextNode(spec.lable);
+            questionLable.appendChild(lable);
+//            处理答案
+            var anser=my.render();
+            questionWrapper.appendChild(questionLable)
+            questionWrapper.appendChild(anser);
+            return questionWrapper;
+        }
+        return that;
+    }
+    function Choice(spec) {
+        var my={};
+        my.render=function () {
+            var input=document.createElement('select');
+            var len=spec.choices.length;
+            for (var i = 0; i < len; i++) {
+                var option=document.createElement("option");
+                option.text=spec.choices[i];
+                option.value=spec.choices[i];
+                input.appendChild(option);
+            }
+            return input;
+        }
+        var that=Question(spec,my);
+        return that;
+    };
+    function Input(spec) {
+        var my={};
+        my.render=function () {
+            var input=document.createElement("input");
+            return input
+        }
+        var that =Question(spec,my);
+        return that;
+    }
+    function Range(spec) {
+        var my={};
+        my.render=function () {
+            var input=document.createElement("input");
+            input.type="range"
+            return input
+        }
+        var that =Question(spec,my);
+        return that;
+    }
+//    扩展你想要的答案种类(对扩展开放，对修改关闭)
+    function TypeUWant(spec) {
+        var my={};
+        my.render=function () {
+            var input=document.createElement("input");
+            input.type="yourType"
+            return input
+        }
+        var that =Question(spec,my);
+        return that;
+    }
+    var view={
+        render:function (target,questions) {
+            for (var i = 0; i < questions.length; i++) {
+                target.appendChild(questions[i].render());
+
+            }
+        }
+    }
+    var questions=[
+            Choice({
+        lable:"Have you used tobacco products within the last 30 days?",
+        choices:["yes","no"]
+    }),
+            Input({
+        lable:'what is your current plan?'
+    }),
+            Range({
+                lable:"range"
+            })
+    ]
+    var questionRegion = document.getElementById('questions');
+    view.render(questionRegion,questions);
+
+</script>
+</body>
+</html>
